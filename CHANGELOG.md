@@ -34,7 +34,7 @@ This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a C
 #### Added
 * Heretic, Hexen, Strife, Doom alpha support
 
-### Version 0.1.0
+### Version 0.1.0 - 2021-02-22
 
 #### Created
 * Doom initial support
