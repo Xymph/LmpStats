@@ -4,7 +4,7 @@
 
 function lmpLegacy($fp, $debug = 0)
 {
-	$vers = ord(fread($fp, 1));
+	$vers = readByte($fp);
 	if ($vers < 129 || $vers > 144) {
 		echo "unexpected Legacy version: $vers\n";
 		return false;
@@ -21,39 +21,39 @@ function lmpLegacy($fp, $debug = 0)
 			echo "unexpected Legacy version $vers signature: $sign\n";
 			return false;
 		}
-		if (($sign = ord(fread($fp, 1))) != 1) {
+		if (($sign = readByte($fp)) != 1) {
 			echo "unexpected Legacy version $vers format: $sign\n";
 			return false;
 		}
 		// 0x04: version
-		$rver = ord(fread($fp, 1));
+		$rver = readByte($fp);
 		// 0x05: rec_version == version
-		$skip = ord(fread($fp, 1));
+		$skip = readByte($fp);
 		// 0x06: sub-version
-		$sver = ord(fread($fp, 1));
+		$sver = readByte($fp);
 	}
 
 	// 0x01-0x03 / 144: 0x07-0x09
-	$skll = ord(fread($fp, 1)) + 1;
-	$epis = ord(fread($fp, 1));
-	$miss = ord(fread($fp, 1));
+	$skll = readByte($fp) + 1;
+	$epis = readByte($fp);
+	$miss = readByte($fp);
 	// 0x04 / 0x0A: Play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-	$mode = ord(fread($fp, 1));
+	$mode = readByte($fp);
 	// 0x05-0x07 / 0x0B-0x0D
-	$resp = ord(fread($fp, 1));
-	$fast = ord(fread($fp, 1));
-	$nomo = ord(fread($fp, 1));
+	$resp = readByte($fp);
+	$fast = readByte($fp);
+	$nomo = readByte($fp);
 	// 0x08 / 0x0E: which player's point of view to use, zero-indexed (0 means player 1)
-	$view = ord(fread($fp, 1));
+	$view = readByte($fp);
 	// 0x09 / 0x0F: time limit v1.x-1.27
-	$skip = fread($fp, 1);
+	$skip = readByte($fp);
 	if ($vers >= 131) // v1.31+
 		// 0x0A / 0x10: multiplayer
-		$mply = ord(fread($fp, 1));
+		$mply = readByte($fp);
 	// 0x0A-29 / 131: 0x0B-0x2A / 144: 0x11-0x30 : player present?
 	$players = array();
 	for ($n = 0; $n < MAXPLAYERS; $n++)
-		if (ord(fread($fp, 1)) > 0)
+		if (readByte($fp) > 0)
 			$players[$n] = 1;
 		else
 			$players[$n] = 0;
@@ -67,7 +67,7 @@ function lmpLegacy($fp, $debug = 0)
 	if ($vers == 144) {
 		// settings
 		$skip = fread($fp, ($rver >= 147 ? 64 : 32));
-		if (ord(fread($fp, 1)) != 0x55) {
+		if (readByte($fp) != 0x55) {
 			echo "missing Legacy version $vers sync mark: ".(ftell($fp)-1)."\n";
 			return false;
 		}
@@ -112,12 +112,12 @@ function lmpLegacy($fp, $debug = 0)
 
 		// parse tic flags
 		if ($tic & ZT_FWD) {
-			$skip = fread($fp, 1);
+			$skip = readByte($fp);
 			if ($debug >= 2)
 				$data .= ' F1';
 		}
 		if ($tic & ZT_SIDE) {
-			$skip = fread($fp, 1);
+			$skip = readByte($fp);
 			if ($debug >= 2)
 				$data .= ' S1';
 		}
@@ -127,13 +127,13 @@ function lmpLegacy($fp, $debug = 0)
 				if ($debug >= 2)
 					$data .= ' A2';
 			} else {
-				$skip = fread($fp, 1);
+				$skip = readByte($fp);
 				if ($debug >= 2)
 					$data .= ' A1';
 			}
 		}
 		if ($tic & ZT_BUTTONS) {
-			$skip = fread($fp, 1);
+			$skip = readByte($fp);
 			if ($debug >= 2)
 				$data .= ' B1';
 		}
@@ -143,19 +143,19 @@ function lmpLegacy($fp, $debug = 0)
 				if ($debug >= 2)
 					$data .= ' M2';
 			} else {
-				$skip = fread($fp, 1);
+				$skip = readByte($fp);
 				if ($debug >= 2)
 					$data .= ' M1';
 			}
 		}
 		if ($tic & ZT_CHAT) {
-			$skip = fread($fp, 1);
+			$skip = readByte($fp);
 			if ($debug >= 2)
 				$data .= ' C1';
 		}
 
 		if ($tic & ZT_EXTRADATA) {
-			$xlen = ord(fread($fp, 1));
+			$xlen = readByte($fp);
 			$data .= sprintf(' X %2d', $xlen);
 			$xtra = fread($fp, $xlen);
 

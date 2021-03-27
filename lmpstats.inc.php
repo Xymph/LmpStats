@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.7.0');
+define('VERSION', '0.7.1');
 
 function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 {
@@ -16,27 +16,27 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 	$seed = '';
 	$cls1 = $cls2 = $cls3 = $cls4 = -1;
 
-	$vers = ord(fread($fp, 1));
+	$vers = readByte($fp);
 	// vanilla Doom <= v1.2, Heretic, Hexen
 	if ($vers >= 0 && $vers <= 9) {
 		$comp = $insr = 0;
 		$skll = $vers + 1;
 		// 0x01-0x02
-		$epis = ord(fread($fp, 1));
-		$miss = ord(fread($fp, 1));
+		$epis = readByte($fp);
+		$miss = readByte($fp);
 		// 0x03-0x06: players 1-4 present, Hexen classes
-		$ply1 = ord(fread($fp, 1));
+		$ply1 = readByte($fp);
 		if ($game == 'X')
-			$cls1 = ord(fread($fp, 1));
-		$ply2 = ord(fread($fp, 1));
+			$cls1 = readByte($fp);
+		$ply2 = readByte($fp);
 		if ($game == 'X')
-			$cls2 = ord(fread($fp, 1));
-		$ply3 = ord(fread($fp, 1));
+			$cls2 = readByte($fp);
+		$ply3 = readByte($fp);
 		if ($game == 'X')
-			$cls3 = ord(fread($fp, 1));
-		$ply4 = ord(fread($fp, 1));
+			$cls3 = readByte($fp);
+		$ply4 = readByte($fp);
 		if ($game == 'X')
-			$cls4 = ord(fread($fp, 1));
+			$cls4 = readByte($fp);
 		$mode = $resp = $fast = $nomo = $view = 0;
 		if ($game == 'H' || $game == 'X')
 			$ticlen = 6;
@@ -44,7 +44,7 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 	// Doom alpha v0.5
 	} else if ($game == 'A' && $vers == 101) { // 'e'
 		$epis = intval(fread($fp, 1));
-		$skip = fread($fp, 1);
+		$skip = readByte($fp);
 		if ($skip != 'm')	{
 			echo "version $vers unexpected signature: $skip\n";
 			return false;
@@ -65,27 +65,27 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 			$ticlen = 6;
 		$comp = $insr = 0;
 		// 0x01-0x03
-		$skll = ord(fread($fp, 1)) + 1;
+		$skll = readByte($fp) + 1;
 		if ($vers != 101)
-			$epis = ord(fread($fp, 1));
+			$epis = readByte($fp);
 		else
 			$epis = 0;
 		if ($vers == 111)
-			$expn = ord(fread($fp, 1));
-		$miss = ord(fread($fp, 1));
+			$expn = readByte($fp);
+		$miss = readByte($fp);
 		// 0x04: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-		$mode = ord(fread($fp, 1));
+		$mode = readByte($fp);
 		// 0x05-0x07
-		$resp = ord(fread($fp, 1));
-		$fast = ord(fread($fp, 1));
-		$nomo = ord(fread($fp, 1));
+		$resp = readByte($fp);
+		$fast = readByte($fp);
+		$nomo = readByte($fp);
 		// 0x08: which player's point of view to use, zero-indexed (0 means player 1)
-		$view = ord(fread($fp, 1));
+		$view = readByte($fp);
 		// 0x09-0x0C: players 1-4 present
-		$ply1 = ord(fread($fp, 1));
-		$ply2 = ord(fread($fp, 1));
-		$ply3 = ord(fread($fp, 1));
-		$ply4 = ord(fread($fp, 1));
+		$ply1 = readByte($fp);
+		$ply2 = readByte($fp);
+		$ply3 = readByte($fp);
+		$ply4 = readByte($fp);
 		// 0x0D: tics data
 
 	// Boom/MBF v2.00-2.03 / 2.10-2.14, CDoom v2.05-2.07
@@ -101,33 +101,33 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 			return false;
 		}
 		// 0x07: compatibility (0 or 1)
-		$comp = ord(fread($fp, 1));
+		$comp = readByte($fp);
 		// 0x08-0x0A
-		$skll = ord(fread($fp, 1)) + 1;
-		$epis = ord(fread($fp, 1));
-		$miss = ord(fread($fp, 1));
+		$skll = readByte($fp) + 1;
+		$epis = readByte($fp);
+		$miss = readByte($fp);
 		// 0x0B: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-		$mode = ord(fread($fp, 1));
+		$mode = readByte($fp);
 		// 0x0C: console player: 0 = 1st, 1 = 2nd, etc.
-		$view = ord(fread($fp, 1));
+		$view = readByte($fp);
 		// 0x0D-0x12: expansion
 		$skip = fread($fp, 6);
 		// 0x13-0x15
-		$resp = ord(fread($fp, 1));
-		$fast = ord(fread($fp, 1));
-		$nomo = ord(fread($fp, 1));
+		$resp = readByte($fp);
+		$fast = readByte($fp);
+		$nomo = readByte($fp);
 		// 0x16: demo insurance (0 or 1)
-		$insr = ord(fread($fp, 1));
+		$insr = readByte($fp);
 		// 0x17-0x1A:	random seed
 		$seed = unpack('N', fread($fp, 4));
 		$seed = sprintf('%08X', $seed[1]);
 		// 0x1B-0x4C: expansion
 		$skip = fread($fp, 50);
 		// 0x4D-0x50: players 1-4 present
-		$ply1 = ord(fread($fp, 1));
-		$ply2 = ord(fread($fp, 1));
-		$ply3 = ord(fread($fp, 1));
-		$ply4 = ord(fread($fp, 1));
+		$ply1 = readByte($fp);
+		$ply2 = readByte($fp);
+		$ply3 = readByte($fp);
+		$ply4 = readByte($fp);
 		// 0x51-0x6C: future expansion
 		$skip = fread($fp, 28);
 		// 0x6D: tics data
@@ -135,8 +135,8 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 	// ZDoom v1.11-1.12
 	} else if (chr($vers) == 'Z') {
 		if (fread($fp, 3) == 'DEM') {
-			$rver = ord(fread($fp, 1)) * 100;
-			$rver += ord(fread($fp, 1));
+			$rver = readByte($fp) * 100;
+			$rver += readByte($fp);
 			echo "unsupported ZDoom version: $rver\n";
 		} else {
 			echo "invalid ZDoom version\n";
@@ -166,17 +166,17 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		$rver = unpack('V', fread($fp, 4));
 		$rver = $rver[1];
 		// 0x0B: sub-version
-		$sver = ord(fread($fp, 1));
+		$sver = readByte($fp);
 		// 0x0C: compatibility (0 or 1)
-		$comp = ord(fread($fp, 1));
+		$comp = readByte($fp);
 		// 0x0D-0x0F
-		$skll = ord(fread($fp, 1)) + 1;
-		$epis = ord(fread($fp, 1)) + 1;
-		$miss = ord(fread($fp, 1));
+		$skll = readByte($fp) + 1;
+		$epis = readByte($fp) + 1;
+		$miss = readByte($fp);
 		// 0x10: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-		$mode = ord(fread($fp, 1));
+		$mode = readByte($fp);
 		// 0x11: console player: 0 = 1st, 1 = 2nd, etc.
-		$view = ord(fread($fp, 1));
+		$view = readByte($fp);
 		// 0x12-0x15:	DM flags
 		if ($rver >= 335)
 			$skip = fread($fp, 4);
@@ -186,21 +186,21 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		// 0x1E-0x23: expansion
 		$skip = fread($fp, 6);
 		// 0x24-0x26
-		$resp = ord(fread($fp, 1));
-		$fast = ord(fread($fp, 1));
-		$nomo = ord(fread($fp, 1));
+		$resp = readByte($fp);
+		$fast = readByte($fp);
+		$nomo = readByte($fp);
 		// 0x27: demo insurance (0 or 1)
-		$insr = ord(fread($fp, 1));
+		$insr = readByte($fp);
 		// 0x28-0x2B:	random seed
 		$seed = unpack('N', fread($fp, 4));
 		$seed = sprintf('%08X', $seed[1]);
 		// 0x2C-0x5D: expansion
 		$skip = fread($fp, 50);
 		// 0x5E-0x61: players 1-4 present
-		$ply1 = ord(fread($fp, 1));
-		$ply2 = ord(fread($fp, 1));
-		$ply3 = ord(fread($fp, 1));
-		$ply4 = ord(fread($fp, 1));
+		$ply1 = readByte($fp);
+		$ply2 = readByte($fp);
+		$ply3 = readByte($fp);
+		$ply4 = readByte($fp);
 		// version dependent tic length
 		if ($rver >= 335)
 			$ticlen += 1; // actions
@@ -271,6 +271,11 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		'secs' => $secs,
 		'foot' => $foot,
 	);
+}
+
+function readByte($fp)
+{
+	return ord(fread($fp, 1));
 }
 
 function debugLog($i, $debug, $lev, $cmd, $par = false)
