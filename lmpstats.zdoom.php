@@ -502,7 +502,7 @@ function lmpZDoom($fp, $debug = 0, $zdoom9 = false)
 			if ($cmd == '')
 				$cmd = 'WARPCH ';
 			if ($rver >= 0x203 || $cmd == 'WARPCH ' || // v2.0.98+
-			    ($cmd == 'INVUSE ' && $zdoom9)) { // v2.0.94/96 with flag
+			    ($cmd == 'INVUSE ' && $zdoom9)) { // v2.0.90-96 with flag
 				debugLog($i, $debug, 1, $cmd);
 				$i += 4;
 			} else {

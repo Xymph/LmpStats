@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.7.1 - 2021-03-27
+
+#### Changed
+
+* Merge LMP_versions.txt into README.md
+* Correct info about ZDoom versions
+* Use readByte function for ordinal file reads
+
 ### Version 0.7.0 - 2021-03-26
 
 * Initial release

@@ -1,6 +1,6 @@
 This list correlates ZDoom-family release versions with the demo
-format versions, defined as DEMOGAMEVERSION (initially GAMEVER) and
-MINDEMOVERSION in the source code.
+format versions, defined as DEMOGAMEVERSION (initially GAMEVER
+through v2.0.98) and MINDEMOVERSION in the source code.
 
 Release	DEMOVER	MINDV
 
@@ -22,8 +22,10 @@ ZDoom:
 2.0.48	0x202	0x200
 (intermediate revisions skipped)
 2.0.63	0x202	0x200
-2.0.94f	0x202	0x200 // forgot bump: DEM_INVUSE 1->4 bytes
-2.0.96	0x202	0x200 // forgot bump: DEM_WEAP*/DEM_SLOT* removed, 4 new added
+2.0.90	0x202	0x200 // forgot bump: DEM_INVUSE 1->4 bytes, 4 new added, DEM_WEAP*/DEM_SLOT* removed
+(intermediate revisions skipped)
+2.0.96	0x202	0x200
+2.0.97	0x203	0x203
 2.0.98	0x203	0x203
 
 2.1.0	0x204	0x204

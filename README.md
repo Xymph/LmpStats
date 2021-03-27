@@ -2,7 +2,7 @@
 
 Primary statistics are the demo version, map slot, skill, and length in game tics and time. Additional stats are gameplay flags, players present, and more depending on the format.
 
-This library is intentionally kept basic and command-line oriented, with errors/messages merely echoed.  Conversion to a class with exceptions et al, if you so desire, is left as an exercise for the reader. :-)
+This library is intentionally kept basic and command-line oriented, with errors/messages merely echoed.  Conversion to a class with exceptions et al, if so desired, is left as an exercise for the reader. :-)
 
 ## Installation
 
@@ -30,7 +30,7 @@ The debug flag (`-d`) shows all tics and messages at level `2`, or only special 
 
 The game flag is needed to distinguish Heretic (`-H`), Hexen (`-X`) and Doom v0.5 alpha (`-A`) from version-less Doom v1.0-1.2 demos.
 
-The ZDoom v2.0.9x (`-z9`) flag is needed for versions 2.0.94-96 to handle the bug where demo command `DEM_INVUSE` was changed from 1 to 4 bytes without incrementing DEMOGAMEVERSION.
+The ZDoom v2.0.9x (`-z9`) flag is needed for versions 2.0.90-96 to handle the bug where demo command `DEM_INVUSE` was changed from 1 to 4 bytes without incrementing DEMOGAMEVERSION.
 
 ## Statistics
 
@@ -72,7 +72,25 @@ The Hexen class numbers are 0 = Fighter, 1 = Cleric, and 2 = Mage.
 
 ## Demo versions
 
-LMP_versions.txt provides the list of version bytes currently recognized by LmpStats.
+This is a list of LMP version bytes currently recognized and returned by LmpStats:
+
+| Version  | Engine |
+|----------|--------|
+| -1       | Doom v0.5 alpha |
+| 0-4      | Doom v1.0-1.2, Heretic, Hexen:<br>skill value |
+| 90 ('Z') | ZDoom-family |
+| 101      | Strife |
+| 104      | Doom v1.4 beta |
+| 105      | Doom v1.5 beta |
+| 106      | Doom v1.6 beta, v1.666 |
+| 108      | Doom v1.8 |
+| 109      | Doom v1.9 |
+| 111      | Doom v1.11 |
+| 129-144  | Doom Legacy v1.29-1.44+ |
+| 200-203  | Boom/MBF v2.00-2.03 |
+| 205-207  | CDoom v2.05-2.07 |
+| 210-214  | Boom/MBF v2.10-2.14 |
+| 255      | Eternity Engine |
 
 ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 
@@ -86,7 +104,7 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * Analysis of [Doom Legacy sources](https://sourceforge.net/projects/doomlegacy/files/)
 * Analysis of [Eternity Engine sources](https://github.com/team-eternity/eternity)
 * [ZDoom demo specification](https://zdoom.org/wiki/Demo) on the [ZDoom wiki](https://zdoom.org/wiki/)
-* Analysis of [ZDoom sources](https://zdoom.org/files/zdoom/)
+* Analysis of [ZDoom & GZDoom sources](https://zdoom.org/files/)
 
 ## License
 
