@@ -2,7 +2,8 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.7.1');
+define('VERSION', '0.7.2');
+define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 {
@@ -10,7 +11,6 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		echo "$file: cannot open\n";
 		return false;
 	}
-	define('DEMOEND', 0x80);
 	$ticlen = 4;
 	$rver = $sver = 0;
 	$seed = '';
