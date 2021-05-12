@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.7.3 - 2021-05-12
+
+#### Changed
+* Accept MBF v2.04 in version byte check
+* Add v2.0.13 to ZDoom versions list
+
 ### Version 0.7.2 - 2021-04-07
 
 #### Fixed

@@ -14,7 +14,7 @@ Requirements: [PHP](https://www.php.net)
 * Heretic
 * Hexen
 * Strife: v1.01
-* Boom/MBF: v2.00-2.03, v2.10-2.14
+* Boom/MBF: v2.00-2.04, v2.10-2.14
 * CDoom: v2.05-2.07
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
@@ -87,7 +87,7 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 109      | Doom v1.9 |
 | 111      | Doom v1.11 |
 | 129-144  | Doom Legacy v1.29-1.44+ |
-| 200-203  | Boom/MBF v2.00-2.03 |
+| 200-204  | Boom/MBF v2.00-2.04 |
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
 | 255      | Eternity Engine |
@@ -104,7 +104,7 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * Analysis of [Doom Legacy sources](https://sourceforge.net/projects/doomlegacy/files/)
 * Analysis of [Eternity Engine sources](https://github.com/team-eternity/eternity)
 * [ZDoom demo specification](https://zdoom.org/wiki/Demo) on the [ZDoom wiki](https://zdoom.org/wiki/)
-* Analysis of [ZDoom & GZDoom sources](https://zdoom.org/files/)
+* Analysis of [ZDoom & GZDoom sources](https://zdoom.org/files/) and more [ZDoom sources](https://forum.zdoom.org/viewtopic.php?t=59727)
 
 ## License
 

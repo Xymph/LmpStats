@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.7.2');
+define('VERSION', '0.7.3');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
@@ -88,8 +88,8 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		$ply4 = readByte($fp);
 		// 0x0D: tics data
 
-	// Boom/MBF v2.00-2.03 / 2.10-2.14, CDoom v2.05-2.07
-	} else if (($vers >= 200 && $vers <= 203) ||
+	// Boom/MBF v2.00-2.04 / 2.10-2.14, CDoom v2.05-2.07
+	} else if (($vers >= 200 && $vers <= 204) ||
 	           ($vers >= 205 && $vers <= 207) ||
 	           ($vers >= 210 && $vers <= 214)) {
 		if (($vers >= 205 && $vers <= 207) || $vers == 214)
