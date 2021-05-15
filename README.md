@@ -16,8 +16,11 @@ Requirements: [PHP](https://www.php.net)
 * Strife: v1.01
 * Boom/MBF: v2.00-2.04, v2.10-2.14
 * CDoom: v2.05-2.07
+* Doom64 EX: v2.5+
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
+* RUDE: v3.1.0pre5+ extended format
+* TASDoom v1.10
 * ZDoom-family: v1.14+
 
 ## Usage
@@ -78,18 +81,21 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 |----------|--------|
 | -1       | Doom v0.5 alpha |
 | 0-4      | Doom v1.0-1.2, Heretic, Hexen:<br>skill value |
-| 90 ('Z') | ZDoom-family |
+| 68 ('D') | Doom64 EX v2.5+ |
+| 90 ('Z') | ZDoom-family, ZDaemon v1.09+ |
 | 101      | Strife |
 | 104      | Doom v1.4 beta |
 | 105      | Doom v1.5 beta |
 | 106      | Doom v1.6 beta, v1.666 |
 | 108      | Doom v1.8 |
 | 109      | Doom v1.9 |
+| 110      | TASDoom v1.10 |
 | 111      | Doom v1.11 |
 | 129-144  | Doom Legacy v1.29-1.44+ |
 | 200-204  | Boom/MBF v2.00-2.04 |
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
+| 222      | RUDE v3.1.0pre5+ extended format |
 | 255      | Eternity Engine |
 
 ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
@@ -100,9 +106,12 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * [The unofficial LMP format description](http://web.archive.org/web/20090920220417/http://demospecs.planetquake.gamespy.com/lmp/lmp.html)
 * [Demo version bytes list](https://www.doomworld.com/forum/topic/120007-specifications-for-source-port-demo-formats/?tab=comments#comment-2265059)
 * [Boom / MBF demo header format](https://www.doomworld.com/forum/topic/72033-boom-mbf-demo-header-format/)
+* [ZDaemon .zdd version format](https://www.doomworld.com/forum/topic/120789-lmpstats-a-php-library-to-collect-demo-statistics/?tab=comments#comment-2313099)
 * Analysis of [CDoom sources](https://sourceforge.net/projects/cdoom207/files/)
+* Analysis of [Doom64 EX sources](https://sourceforge.net/p/doom64ex/code/HEAD/tree/) or [alternate repository](https://github.com/svkaiser/Doom64EX/tree/master/src)
 * Analysis of [Doom Legacy sources](https://sourceforge.net/projects/doomlegacy/files/)
 * Analysis of [Eternity Engine sources](https://github.com/team-eternity/eternity)
+* Analysis of [RUDE sources](https://github.com/drfrag666/RUDE)
 * [ZDoom demo specification](https://zdoom.org/wiki/Demo) on the [ZDoom wiki](https://zdoom.org/wiki/)
 * Analysis of [ZDoom & GZDoom sources](https://zdoom.org/files/) and more [ZDoom sources](https://forum.zdoom.org/viewtopic.php?t=59727)
 

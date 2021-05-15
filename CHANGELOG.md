@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.8.0 - 2021-05-15
+
+#### Added
+* Support for Doom64 EX, RUDE, TASDoom 
+* ZDaemon v1.09+ support for the version number only
+
 ### Version 0.7.3 - 2021-05-12
 
 #### Changed
