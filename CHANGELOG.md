@@ -2,10 +2,22 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.9.0 - 2021-05-17
+
+#### Added
+* Doom Classic support with -cl option
+* Doom64 EX v1.4 (and possibly other v1.x releases) support
+
+#### Changed
+* Return minimal version array for ZDoom v1.11-1.12 & ZDaemon v1.09+ instead of showing an "unsupported" message
+
+#### Fixed
+* Adjust ticrate for Doom64 EX
+
 ### Version 0.8.0 - 2021-05-15
 
 #### Added
-* Support for Doom64 EX, RUDE, TASDoom 
+* Support for Doom64 EX v2.5+, RUDE, TASDoom 
 * ZDaemon v1.09+ support for the version number only
 
 ### Version 0.7.3 - 2021-05-12

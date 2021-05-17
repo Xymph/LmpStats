@@ -2,16 +2,17 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.8.0');
+define('VERSION', '0.9.0');
 define('DEMOEND', 0x80);
 
-function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
+function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
 {
 	if (!$fp = @fopen($file, 'rb')) {
 		echo "$file: cannot open\n";
 		return false;
 	}
 	$ticlen = 4;
+	$ticrat = 35;
 	$rver = $sver = 0;
 	$seed = '';
 	$cls1 = $cls2 = $cls3 = $cls4 = -1;
@@ -57,27 +58,29 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		$ply2 = $ply3 = $ply4 = 0;
 		// 0x04: tics data
 
-	// vanilla Doom v1.4-1.9 (= offsets), 1.10, 1.11; Strife 1.01; RUDE 3.1.0pre5+
-	} else if ($vers >= 104 && $vers <= 111 || $vers == 101 || $vers == 222) {
+	// vanilla Doom v1.4-1.9 (= offsets), TASDoom v1.10, PrBoom v1.11 longtics;
+	// Doom Classic v1.11, v1.12 debug; Strife 1.01; Doom64 EX v1.4; RUDE 3.1.0pre5+
+	} else if ($vers >= 104 && $vers <= 112 || $vers == 101 || $vers == 116 || $vers == 222) {
 		if ($vers == 111 || $vers == 222)
 			$ticlen = 5;
-		if ($vers == 101)
+		if ($vers == 101 || $vers == 112)
 			$ticlen = 6;
 		$comp = $insr = 0;
 		// 0x01-0x03
 		$skll = readByte($fp) + 1;
-		if ($vers != 101)
+		if ($vers != 101 && $vers != 116)
 			$epis = readByte($fp);
 		else
 			$epis = 0;
-		// Classic v1.11
-		//if ($vers == 111)
-		//	$pack = readByte($fp);
+		if (($classic && $vers == 111) || $vers == 112)
+			$pack = readByte($fp);
 		$miss = readByte($fp);
 		// 0x04: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
 		$mode = readByte($fp);
 		// 0x05-0x07
 		$resp = readByte($fp);
+		if ($vers == 116)
+			$skip = readByte($fp); // respawnitem
 		$fast = readByte($fp);
 		$nomo = readByte($fp);
 		// 0x08: which player's point of view to use, zero-indexed (0 means player 1)
@@ -90,6 +93,12 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		$ply2 = readByte($fp);
 		$ply3 = readByte($fp);
 		$ply4 = readByte($fp);
+		if ($classic || $vers == 112) {
+			// health, armorpoints, armortype, readyweapon, NUMWEAPONS, NUMAMMO + maxammo
+			$statelen = 4 + 9 + 4*2;
+			$statelen *= 4 * ($ply1 + $ply2 + $ply3 + $ply4);
+			$skip = fread($fp, $statelen);
+		}
 		// 0x0D: tics data
 
 	// Doom64 EX v2.5+
@@ -99,6 +108,7 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 			return false;
 		}
 		$ticlen = 8;
+		$ticrat = 30;
 		$epis = 0;
 		$comp = $insr = 0;
 		// 0x05-0x06
@@ -169,21 +179,23 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 		$skip = fread($fp, 28);
 		// 0x6D: tics data
 
-	// ZDoom v1.11-1.12
+	// ZDoom v1.11-1.12; ZDaemon v1.09+
 	} else if (chr($vers) == 'Z') {
 		$head = fread($fp, 3);
+		// ZDoom
 		if ($head == 'DEM') {
 			$rver = readByte($fp) * 100;
 			$rver += readByte($fp);
-			echo "unsupported ZDoom version: $rver\n";
+			return array('vers' => ord('Y'), 'rver' => $rver);
+		// ZDaemon
 		} else if ($head == "DD\0") {
 			fseek($fp, 46);
 			fscanf($fp, "%[0-9(). -]", $rver);
-			echo "unsupported ZDaemon version: $rver\n";
+			return array('vers' => ord('X'), 'rver' => $rver);
 		} else {
 			echo "invalid ZDoom version\n";
+			return false;
 		}
-		return false;
 
 	// ZDoom v1.14+
 	} else if (chr($vers) == 'F') {
@@ -278,7 +290,7 @@ function lmpStats($file, $game = null, $debug = 0, $zdoom9 = false)
 
 	// compute tics & time
 	$tics /= $plys;
-	$tsec = round($tics / 35, 2);
+	$tsec = round($tics / $ticrat, 2);
 	$mins = intval($tsec / 60);
 	$secs = round($tsec - $mins * 60, 2);
 

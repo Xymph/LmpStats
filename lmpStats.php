@@ -4,11 +4,11 @@
 	// Copyright (C) 2021 by Frans P. de Vries
 	require_once __DIR__.'/lmpstats.inc.php';
 
-	$usage = "Usage: {$argv[0]} [-d <level 1/2>] [-H|X|A] [-z9] LMP-file\n";
+	$usage = "Usage: {$argv[0]} [-d <level 1/2>] [-H|X|A] [-cl] [-z9] LMP-file\n";
 
 	// check input options & parameters
 	$game = null;
-	$zdoom9 = false;
+	$classic = $zdoom9 = false;
 	$debug = 0;
 	while (isset($argv[1]) && $argv[1][0] == '-') {
 		if ($argv[1] == '-H') {
@@ -17,6 +17,8 @@
 			$game = 'X';
 		} else if ($argv[1] == '-A') {
 			$game = 'A';
+		} else if ($argv[1] == '-cl') {
+			$classic = true;
 		} else if ($argv[1] == '-z9') {
 			$zdoom9 = true;
 		} else if ($argv[1] == '-d') {
@@ -42,7 +44,7 @@
 		exit(1);
 	}
 
-	$lmp = lmpStats($argv[1], $game, $debug, $zdoom9);
+	$lmp = lmpStats($argv[1], $game, $debug, $classic, $zdoom9);
 	echo "{$argv[1]} :\n";
 	// show class 'legend'
 	if ($game == 'X')

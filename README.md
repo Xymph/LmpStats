@@ -10,28 +10,34 @@ Requirements: [PHP](https://www.php.net)
 
 ## Supported demo formats
 
-* Doom: v1.0-v1.9, v1.11, v0.5 alpha
+* Doom: v1.0-v1.9, v0.5 alpha
 * Heretic
 * Hexen
 * Strife: v1.01
 * Boom/MBF: v2.00-2.04, v2.10-2.14
 * CDoom: v2.05-2.07
-* Doom64 EX: v2.5+
+* Doom64 EX: v1.4, v2.5+
+* Doom Classic: v1.11-1.12
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
-* RUDE: v3.1.0pre5+ extended format
+* PrBoom+ v1.11 longtics
+* RUDE: v3.1.0pre5+ extended
 * TASDoom v1.10
+* ZDaemon v1.09+ (minimal)
+* ZDoom v1.11-1.12 (minimal)
 * ZDoom-family: v1.14+
 
 ## Usage
 
 **lmpStats.php** is a command-line script to invoke the library on a demo file, and also shows how to include **lmpstats.inc.php** in a script and use its results.
 
-    lmpStats.php [-d <level 1/2>] [-H|X|A] [-z9] LMP-file
+    lmpStats.php [-d <level 1/2>] [-H|X|A] [-cl] [-z9] LMP-file
 
 The debug flag (`-d`) shows all tics and messages at level `2`, or only special tics at level `1`, with tic addressing from the start of the file.  For the ZDoom-family, tic addresses are relative to the start of the (uncompressed) body chunk, which is saved in `/tmp/body.lmp` at both levels for hex-dump comparison.
 
 The game flag is needed to distinguish Heretic (`-H`), Hexen (`-X`) and Doom v0.5 alpha (`-A`) from version-less Doom v1.0-1.2 demos.
+
+The Classic (`-cl`) flag is needed to distinguish Doom Classic format from PrBoom+ longtics format, both v1.11.
 
 The ZDoom v2.0.9x (`-z9`) flag is needed for versions 2.0.90-96 to handle the bug where demo command `DEM_INVUSE` was changed from 1 to 4 bytes without incrementing DEMOGAMEVERSION.
 
@@ -40,7 +46,7 @@ The ZDoom v2.0.9x (`-z9`) flag is needed for versions 2.0.90-96 to handle the bu
 The return array contains the following entries, if available:
 
 * **`vers`**: LMP version (see below)
-* **`rver`**: real version for Eternity and ZDoom-family
+* **`rver`**: real version for Eternity, ZDaemon, and ZDoom-family
 * **`sver`**: sub-version for Eternity or minimum version for ZDoom-family
 * **`skll`**: [skill level](https://doomwiki.org/wiki/Skill_level)
 * **`epis`**: episode number (always 1 for Doom II)
@@ -81,8 +87,10 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 |----------|--------|
 | -1       | Doom v0.5 alpha |
 | 0-4      | Doom v1.0-1.2, Heretic, Hexen:<br>skill value |
-| 68 ('D') | Doom64 EX v2.5+ |
-| 90 ('Z') | ZDoom-family, ZDaemon v1.09+ |
+| 68 ('D') | Doom64 EX v2.5+ ("DM64") |
+| 88 ('X') | ZDaemon v1.09+ ("ZDD") |
+| 89 ('Y') | ZDoom v1.11-1.12 ("ZDEM") |
+| 90 ('Z') | ZDoom-family ("FORM") |
 | 101      | Strife |
 | 104      | Doom v1.4 beta |
 | 105      | Doom v1.5 beta |
@@ -90,12 +98,15 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 108      | Doom v1.8 |
 | 109      | Doom v1.9 |
 | 110      | TASDoom v1.10 |
-| 111      | Doom v1.11 |
+| 111      | PrDoom+ v1.11 longtics |
+| 111      | Doom Classic v1.11 with -cl |
+| 112      | Doom Classic v1.12 debug |
+| 116      | Doom64 EX v1.4 (and other v1.x releases?) |
 | 129-144  | Doom Legacy v1.29-1.44+ |
 | 200-204  | Boom/MBF v2.00-2.04 |
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
-| 222      | RUDE v3.1.0pre5+ extended format |
+| 222      | RUDE v3.1.0pre5+ extended |
 | 255      | Eternity Engine |
 
 ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
@@ -108,6 +119,7 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * [Boom / MBF demo header format](https://www.doomworld.com/forum/topic/72033-boom-mbf-demo-header-format/)
 * [ZDaemon .zdd version format](https://www.doomworld.com/forum/topic/120789-lmpstats-a-php-library-to-collect-demo-statistics/?tab=comments#comment-2313099)
 * Analysis of [CDoom sources](https://sourceforge.net/projects/cdoom207/files/)
+* Analysis of [Doom Classic sources](https://github.com/id-Software/DOOM-3-BFG/tree/master/doomclassic)
 * Analysis of [Doom64 EX sources](https://sourceforge.net/p/doom64ex/code/HEAD/tree/) or [alternate repository](https://github.com/svkaiser/Doom64EX/tree/master/src)
 * Analysis of [Doom Legacy sources](https://sourceforge.net/projects/doomlegacy/files/)
 * Analysis of [Eternity Engine sources](https://github.com/team-eternity/eternity)
