@@ -16,13 +16,14 @@ Requirements: [PHP](https://www.php.net)
 * Strife: v1.01
 * Boom/MBF: v2.00-2.04, v2.10-2.14
 * CDoom: v2.05-2.07
+* Chase, Timer
 * Doom64 EX: v1.4, v2.5+
 * Doom Classic: v1.11-1.12
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
 * PrBoom+ v1.11 longtics
 * RUDE: v3.1.0pre5+ extended
-* TASDoom v1.10
+* TASDoom v1.10, TASMBF v2.03
 * ZDaemon v1.09+ (minimal)
 * ZDoom v1.11-1.12 (minimal)
 * ZDoom-family: v1.14+
@@ -97,13 +98,14 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 106      | Doom v1.6 beta, v1.666 |
 | 108      | Doom v1.8 |
 | 109      | Doom v1.9 |
-| 110      | TASDoom v1.10 |
+| 110      | TASDoom v1.10, Chase, Timer |
 | 111      | PrDoom+ v1.11 longtics |
-| 111      | Doom Classic v1.11 with -cl |
+| 111      | Doom Classic v1.11 with `-cl` |
 | 112      | Doom Classic v1.12 debug |
 | 116      | Doom64 EX v1.4 (and other v1.x releases?) |
 | 129-144  | Doom Legacy v1.29-1.44+ |
 | 200-204  | Boom/MBF v2.00-2.04 |
+| 203      | TASMBF v2.03 |
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
 | 222      | RUDE v3.1.0pre5+ extended |
