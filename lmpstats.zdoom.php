@@ -2,6 +2,105 @@
 // Analyze ZDoom-family demos
 // Copyright (C) 2021 by Frans P. de Vries
 
+// deathmatch flags
+define('DF_NO_MONSTERS',      0x1000);
+define('DF_MONSTERS_RESPAWN', 0x2000);
+define('DF_FAST_MONSTERS',    0x8000);
+
+// types of demo commands
+define('DEM_BAD', 0);
+define('DEM_USERCMD', 1);
+define('DEM_USERCMDCLONE', 2); // v1
+//define('DEM_EMPTYUSERCMD', 2); // v2.0.47j+
+//define('DEM_STUFFTEXT', 3); // v1, never used
+define('DEM_MUSICCHANGE', 4);
+define('DEM_PRINT', 5);
+define('DEM_CENTERPRINT', 6);
+define('DEM_STOP', 7);
+define('DEM_UINFCHANGED', 8);
+define('DEM_SINFCHANGED', 9);
+define('DEM_GENERICCHEAT', 10);
+define('DEM_GIVECHEAT', 11);
+define('DEM_SAY', 12);
+define('DEM_DROPPLAYER', 13);
+define('DEM_CHANGEMAP', 14);
+define('DEM_SUICIDE', 15);
+define('DEM_ADDBOT', 16);
+define('DEM_KILLBOTS', 17);
+// types of v1.23+ demo commands
+define('DEM_INVSEL', 18);
+//define('DEM_INVUSEALL', 18); // v2.0.96+
+define('DEM_INVUSE', 19);
+define('DEM_PAUSE', 20);
+define('DEM_SAVEGAME', 21);
+define('DEM_WEAPSEL', 22); // < v2.0.96
+define('DEM_WEAPSLOT', 23); // < v2.0.96
+define('DEM_WEAPNEXT', 24); // < v2.0.96
+define('DEM_WEAPPREV', 25); // < v2.0.96
+define('DEM_SUMMON', 26);
+define('DEM_FOV', 27);
+define('DEM_MYFOV', 28);
+define('DEM_CHANGEMAP2', 29);
+define('DEM_SLOTSCHANGE', 30); // < v2.0.96
+define('DEM_SLOTCHANGE', 31); // < v2.0.96
+define('DEM_RUNSCRIPT', 32);
+define('DEM_SINFCHANGEDXOR', 33);
+define('DEM_INVDROP', 34); // v2.0.94/6+
+define('DEM_WARPCHEAT', 35);
+define('DEM_CENTERVIEW', 36);
+define('DEM_SUMMONFRIEND', 37);
+define('DEM_SPRAY', 38); // v2.1.0+
+define('DEM_CROUCH', 39);
+define('DEM_RUNSCRIPT2', 40); // v2.1.5+
+define('DEM_CHECKAUTOSAVE', 41); // v2.1.7+
+define('DEM_DOAUTOSAVE', 42);
+define('DEM_MORPHEX', 43);
+define('DEM_SUMMONFOE', 44); // v2.2.0+
+define('DEM_WIPEON', 45); // = v2.2.0
+define('DEM_WIPEOFF', 46); // = v2.2.0
+define('DEM_TAKECHEAT', 47); // v2.2.0+
+define('DEM_ADDCONTROLLER', 48); // v2.3.0+
+define('DEM_DELCONTROLLER', 49);
+define('DEM_KILLCLASSCHEAT', 50);
+define('DEM_CONVERSATION', 51); // v2.3.0-v2.4.0
+define('DEM_SUMMON2', 52); // v2.3.0+
+define('DEM_SUMMONFRIEND2', 53);
+define('DEM_SUMMONFOE2', 54);
+define('DEM_ADDSLOTDEFAULT', 55);
+define('DEM_ADDSLOT', 56);
+define('DEM_SETSLOT', 57);
+define('DEM_SUMMONMBF', 58); // v2.4.0+
+define('DEM_CONVREPLY', 59); // v2.4.1+
+define('DEM_CONVCLOSE', 60);
+define('DEM_CONVNULL', 61);
+define('DEM_RUNSPECIAL', 62); // v2.6.0+
+define('DEM_SETPITCHLIMIT', 63);
+define('DEM_ADVANCEINTER', 64);
+define('DEM_RUNNAMEDSCRIPT', 65);
+define('DEM_REVERTCAMERA', 66);
+define('DEM_SETSLOTPNUM', 67);
+define('DEM_REMOVE', 68); // v2.8.0+
+define('DEM_FINISHGAME', 69); // v2.8.0+
+// types of LZ v3.83+ / GZ v2.4.0+ demo commands
+define('DEM_NETEVENT', 70);
+define('DEM_MDK', 71);
+define('DEM_SETINV', 72); // GZ v3.0.0+
+
+// flags in demo commands
+define('UCMDF_BUTTONS', 0x01);
+define('UCMDF_PITCH', 0x02);
+define('UCMDF_YAW', 0x04);
+define('UCMDF_FORWARDMOVE', 0x08);
+define('UCMDF_SIDEMOVE', 0x10);
+define('UCMDF_UPMOVE', 0x20);
+define('UCMDF_IMPULSE', 0x40);
+define('UCMDF_ROLL', 0x40);
+define('UCMDF_MORE', 0x80);
+define('UCMDF2_ROLL', 0x01);
+define('UCMDF2_USE', 0x02);
+// slots v2+
+define('NUM_WEAPON_SLOTS', 10);
+
 function lmpZDoom($fp, $debug = 0, $zdoom9 = false)
 {
 	$form = fread($fp, 4);
@@ -23,11 +122,6 @@ function lmpZDoom($fp, $debug = 0, $zdoom9 = false)
 	$cls1 = $cls2 = $cls3 = $cls4 = -1;
 	$resp = $fast = $nomo = 0;
 	$seed = '';
-
-	// deathmatch flags
-	define('DF_NO_MONSTERS',      0x1000);
-	define('DF_MONSTERS_RESPAWN', 0x2000);
-	define('DF_FAST_MONSTERS',    0x8000);
 
 	// process all chunks
 	$compressed = $multiplayer = false;
@@ -187,100 +281,6 @@ function lmpZDoom($fp, $debug = 0, $zdoom9 = false)
 		$epis = $miss = 0;
 	}
 	$plys = $ply1 + $ply2 + $ply3 + $ply4;
-
-	// types of demo commands
-	define('DEM_BAD', 0);
-	define('DEM_USERCMD', 1);
-	define('DEM_USERCMDCLONE', 2); // v1
-	//define('DEM_EMPTYUSERCMD', 2); // v2.0.47j+
-	//define('DEM_STUFFTEXT', 3); // v1, never used
-	define('DEM_MUSICCHANGE', 4);
-	define('DEM_PRINT', 5);
-	define('DEM_CENTERPRINT', 6);
-	define('DEM_STOP', 7);
-	define('DEM_UINFCHANGED', 8);
-	define('DEM_SINFCHANGED', 9);
-	define('DEM_GENERICCHEAT', 10);
-	define('DEM_GIVECHEAT', 11);
-	define('DEM_SAY', 12);
-	define('DEM_DROPPLAYER', 13);
-	define('DEM_CHANGEMAP', 14);
-	define('DEM_SUICIDE', 15);
-	define('DEM_ADDBOT', 16);
-	define('DEM_KILLBOTS', 17);
-	// types of v1.23+ demo commands
-	define('DEM_INVSEL', 18);
-	//define('DEM_INVUSEALL', 18); // v2.0.96+
-	define('DEM_INVUSE', 19);
-	define('DEM_PAUSE', 20);
-	define('DEM_SAVEGAME', 21);
-	define('DEM_WEAPSEL', 22); // < v2.0.96
-	define('DEM_WEAPSLOT', 23); // < v2.0.96
-	define('DEM_WEAPNEXT', 24); // < v2.0.96
-	define('DEM_WEAPPREV', 25); // < v2.0.96
-	define('DEM_SUMMON', 26);
-	define('DEM_FOV', 27);
-	define('DEM_MYFOV', 28);
-	define('DEM_CHANGEMAP2', 29);
-	define('DEM_SLOTSCHANGE', 30); // < v2.0.96
-	define('DEM_SLOTCHANGE', 31); // < v2.0.96
-	define('DEM_RUNSCRIPT', 32);
-	define('DEM_SINFCHANGEDXOR', 33);
-	define('DEM_INVDROP', 34); // v2.0.94/6+
-	define('DEM_WARPCHEAT', 35);
-	define('DEM_CENTERVIEW', 36);
-	define('DEM_SUMMONFRIEND', 37);
-	define('DEM_SPRAY', 38); // v2.1.0+
-	define('DEM_CROUCH', 39);
-	define('DEM_RUNSCRIPT2', 40); // v2.1.5+
-	define('DEM_CHECKAUTOSAVE', 41); // v2.1.7+
-	define('DEM_DOAUTOSAVE', 42);
-	define('DEM_MORPHEX', 43);
-	define('DEM_SUMMONFOE', 44); // v2.2.0+
-	define('DEM_WIPEON', 45); // = v2.2.0
-	define('DEM_WIPEOFF', 46); // = v2.2.0
-	define('DEM_TAKECHEAT', 47); // v2.2.0+
-	define('DEM_ADDCONTROLLER', 48); // v2.3.0+
-	define('DEM_DELCONTROLLER', 49);
-	define('DEM_KILLCLASSCHEAT', 50);
-	define('DEM_CONVERSATION', 51); // v2.3.0-v2.4.0
-	define('DEM_SUMMON2', 52); // v2.3.0+
-	define('DEM_SUMMONFRIEND2', 53);
-	define('DEM_SUMMONFOE2', 54);
-	define('DEM_ADDSLOTDEFAULT', 55);
-	define('DEM_ADDSLOT', 56);
-	define('DEM_SETSLOT', 57);
-	define('DEM_SUMMONMBF', 58); // v2.4.0+
-	define('DEM_CONVREPLY', 59); // v2.4.1+
-	define('DEM_CONVCLOSE', 60);
-	define('DEM_CONVNULL', 61);
-	define('DEM_RUNSPECIAL', 62); // v2.6.0+
-	define('DEM_SETPITCHLIMIT', 63);
-	define('DEM_ADVANCEINTER', 64);
-	define('DEM_RUNNAMEDSCRIPT', 65);
-	define('DEM_REVERTCAMERA', 66);
-	define('DEM_SETSLOTPNUM', 67);
-	define('DEM_REMOVE', 68); // v2.8.0+
-	define('DEM_FINISHGAME', 69); // v2.8.0+
-	// types of LZ v3.83+ / GZ v2.4.0+ demo commands
-	define('DEM_NETEVENT', 70);
-	define('DEM_MDK', 71);
-	define('DEM_SETINV', 72); // GZ v3.0.0+
-
-	// flags in demo commands
-	define('UCMDF_BUTTONS', 0x01);
-	define('UCMDF_PITCH', 0x02);
-	define('UCMDF_YAW', 0x04);
-	define('UCMDF_FORWARDMOVE', 0x08);
-	define('UCMDF_SIDEMOVE', 0x10);
-	define('UCMDF_UPMOVE', 0x20);
-	define('UCMDF_IMPULSE', 0x40);
-	define('UCMDF_ROLL', 0x40);
-	define('UCMDF_MORE', 0x80);
-	define('UCMDF2_ROLL', 0x01);
-	define('UCMDF2_USE', 0x02);
-	// slots v2+
-	define('NUM_WEAPON_SLOTS', 10);
 
 	// decompile tics body
 	$tics = $i = 0;

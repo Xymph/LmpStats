@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.9.2 - 2021-11-08
+
+#### Changed
+* Define constants outside functions to prevent PHP notices on repeated invocations
+
 ### Version 0.9.1 - 2021-05-19
 
 #### Changed

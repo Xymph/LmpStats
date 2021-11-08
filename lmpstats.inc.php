@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.9.1');
+define('VERSION', '0.9.2');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)

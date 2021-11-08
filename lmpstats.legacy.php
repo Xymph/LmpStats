@@ -2,6 +2,34 @@
 // Analyze Doom Legacy demos
 // Copyright (C) 2021 by Frans P. de Vries
 
+define('MAXPLAYERS', 32);
+define('NUMWEAPONS', 9);
+
+// tic flags
+define('ZT_FWD', 0x01);
+define('ZT_SIDE', 0x02);
+define('ZT_ANGLE', 0x04);
+define('ZT_BUTTONS', 0x08);
+define('ZT_AIMING', 0x10);
+define('ZT_CHAT', 0x20); // unused
+define('ZT_EXTRADATA', 0x40);
+// ExtraData types
+define('XD_NAMEANDCOLOR', 0x01);
+define('XD_WEAPONPREF', 0x02);
+define('XD_EXIT', 0x03);
+define('XD_QUIT', 0x04);
+define('XD_KICK', 0x05);
+define('XD_NETVAR', 0x06);
+define('XD_SAY', 0x07);
+define('XD_MAP', 0x08);
+define('XD_EXITLEVEL', 0x09);
+define('XD_LOADGAME', 0x0A);
+define('XD_SAVEGAME', 0x0B);
+define('XD_PAUSE', 0x0C);
+define('XD_ADDPLAYER', 0x0D);
+define('XD_ADDBOT', 0x0E);
+define('XD_USEARTEFACT', 0x0F);
+
 function lmpLegacy($fp, $debug = 0)
 {
 	$vers = readByte($fp);
@@ -11,9 +39,6 @@ function lmpLegacy($fp, $debug = 0)
 	}
 	$rver = $sver = $mply = 0;
 	$mapn = '';
-
-	define('MAXPLAYERS', 32);
-	define('NUMWEAPONS', 9);
 
 	// check for v1.44+ signature
 	if ($vers == 144) {
@@ -72,31 +97,6 @@ function lmpLegacy($fp, $debug = 0)
 			return false;
 		}
 	}
-
-	// tic flags
-	define('ZT_FWD', 0x01);
-	define('ZT_SIDE', 0x02);
-	define('ZT_ANGLE', 0x04);
-	define('ZT_BUTTONS', 0x08);
-	define('ZT_AIMING', 0x10);
-	define('ZT_CHAT', 0x20); // unused
-	define('ZT_EXTRADATA', 0x40);
-	// ExtraData types
-	define('XD_NAMEANDCOLOR', 0x01);
-	define('XD_WEAPONPREF', 0x02);
-	define('XD_EXIT', 0x03);
-	define('XD_QUIT', 0x04);
-	define('XD_KICK', 0x05);
-	define('XD_NETVAR', 0x06);
-	define('XD_SAY', 0x07);
-	define('XD_MAP', 0x08);
-	define('XD_EXITLEVEL', 0x09);
-	define('XD_LOADGAME', 0x0A);
-	define('XD_SAVEGAME', 0x0B);
-	define('XD_PAUSE', 0x0C);
-	define('XD_ADDPLAYER', 0x0D);
-	define('XD_ADDBOT', 0x0E);
-	define('XD_USEARTEFACT', 0x0F);
 
 	// tics data
 	$tics = 0;
