@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.9.2');
+define('VERSION', '0.10.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
@@ -209,63 +209,142 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		fseek($fp, 0);
 		return lmpLegacy($fp, $debug);
 
-	// Eternity v2.55: v3.29-4.0+
+	// Eternity & PrBoom+um v2.55
 	} else if ($vers == 255) {
 		$sign = fread($fp, 6);
-		if (strncmp($sign, "ETERN", 5) != 0) {
+		// Eternity v2.55: v3.29-4.0+
+		if (strncmp($sign, "ETERN", 5) == 0) {
+			// 0x07-0x0A: real version
+			$rver = unpack('V', fread($fp, 4));
+			$rver = $rver[1];
+			// 0x0B: sub-version
+			$sver = readByte($fp);
+			// 0x0C: compatibility (0 or 1)
+			$comp = readByte($fp);
+			// 0x0D-0x0F
+			$skll = readByte($fp) + 1;
+			$epis = readByte($fp) + 1;
+			$miss = readByte($fp);
+			// 0x10: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
+			$mode = readByte($fp);
+			// 0x11: console player: 0 = 1st, 1 = 2nd, etc.
+			$view = readByte($fp);
+			// 0x12-0x15:	DM flags
+			if ($rver >= 335)
+				$skip = fread($fp, 4);
+			// 0x16-0x1D:	map name
+			if ($rver >= 329)
+				$skip = fread($fp, 8);
+			// 0x1E-0x23: expansion
+			$skip = fread($fp, 6);
+			// 0x24-0x26
+			$resp = readByte($fp);
+			$fast = readByte($fp);
+			$nomo = readByte($fp);
+			// 0x27: demo insurance (0 or 1)
+			$insr = readByte($fp);
+			// 0x28-0x2B:	random seed
+			$seed = unpack('N', fread($fp, 4));
+			$seed = sprintf('%08X', $seed[1]);
+			// 0x2C-0x5D: expansion
+			$skip = fread($fp, 50);
+			// 0x5E-0x61: players 1-4 present
+			$ply1 = readByte($fp);
+			$ply2 = readByte($fp);
+			$ply3 = readByte($fp);
+			$ply4 = readByte($fp);
+			// version dependent tic length
+			if ($rver >= 335)
+				$ticlen += 1; // actions
+			if ($rver >= 333)
+				$ticlen += 3; // longtic + look
+			else if ($rver >= 329)
+				$ticlen += 1; // old look
+			if ($rver >= 340)
+				$ticlen += 1; // fly
+			if ($rver >= 401)
+				$ticlen += 5; // item/weapon/slot
+
+		// PrBoom+um v2.55: v2.6+
+		} elseif (strncmp($sign, "PR+UM", 5) == 0) {
+			// 0x07: extension version
+			$ever = readByte($fp);
+			if ($ever != 1) {
+				echo "$sign unexpected extension format: $ever\n";
+				return false;
+			}
+			// 0x08-0x09: number of extensions
+			$next = readByte($fp);
+			$next |= readByte($fp) << 8;
+			for ($i = 0; $i < $next; $i++) {
+				// extension length
+				$elen = readByte($fp);
+				// extension name
+				$extn = fread($fp, $elen);
+				if (strncmp($extn, "UMAPINFO", $elen) != 0) {
+					echo "$sign unexpected extension: $extn\n";
+					return false;
+				}
+				$extn = fread($fp, 8);
+				if (substr($extn, 0, 3) == 'MAP') {
+					$episu = 1;
+					$missu = intval(substr($extn, 3));
+				} elseif ($extn[0] == 'E' && ($mpos = strpos($extn, 'M')) !== false) {
+					$episu = intval(substr($extn, 0, $mpos));
+					$missu = intval(substr($extn, $mpos+1));
+				} else {
+					echo "$sign unexpected UMAPINFO extension value $extn\n";
+					return false;
+				}
+			}
+
+			$rver = readByte($fp);
+			$sign = fread($fp, 6);
+			if (ord($sign[0]) != 0x1D ||
+			    (ord($sign[4]) != 0xE6 && ord($sign[5]) != 0xE6)) {
+				echo "version $vers unexpected signature: $sign\n";
+				return false;
+			}
+			// 0x07* +extensions: compatibility (0 or 1)
+			$comp = readByte($fp);
+			// 0x08-0x0A*
+			$skll = readByte($fp) + 1;
+			$epis = readByte($fp);
+			$miss = readByte($fp);
+			if ($epis != $episu || $miss != $missu) {
+				echo "UMAPINFO / Boom slots deviate: episode $episu / $epis, mission $missu / $miss\n";
+				return false;
+			}
+			// 0x0B*: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
+			$mode = readByte($fp);
+			// 0x0C*: console player: 0 = 1st, 1 = 2nd, etc.
+			$view = readByte($fp);
+			// 0x0D-0x12*: expansion
+			$skip = fread($fp, 6);
+			// 0x13-0x15*
+			$resp = readByte($fp);
+			$fast = readByte($fp);
+			$nomo = readByte($fp);
+			// 0x16*: demo insurance (0 or 1)
+			$insr = readByte($fp);
+			// 0x17-0x1A*:	random seed
+			$seed = unpack('N', fread($fp, 4));
+			$seed = sprintf('%08X', $seed[1]);
+			// 0x1B-0x4C*: expansion
+			$skip = fread($fp, 50);
+			// 0x4D-0x50*: players 1-4 present
+			$ply1 = readByte($fp);
+			$ply2 = readByte($fp);
+			$ply3 = readByte($fp);
+			$ply4 = readByte($fp);
+			// 0x51-0x6C*: future expansion
+			$skip = fread($fp, 28);
+			// 0x6D*: tics data
+
+		} else {
 			echo "version $vers unexpected signature: $sign\n";
 			return false;
 		}
-		// 0x07-0x0A: real version
-		$rver = unpack('V', fread($fp, 4));
-		$rver = $rver[1];
-		// 0x0B: sub-version
-		$sver = readByte($fp);
-		// 0x0C: compatibility (0 or 1)
-		$comp = readByte($fp);
-		// 0x0D-0x0F
-		$skll = readByte($fp) + 1;
-		$epis = readByte($fp) + 1;
-		$miss = readByte($fp);
-		// 0x10: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-		$mode = readByte($fp);
-		// 0x11: console player: 0 = 1st, 1 = 2nd, etc.
-		$view = readByte($fp);
-		// 0x12-0x15:	DM flags
-		if ($rver >= 335)
-			$skip = fread($fp, 4);
-		// 0x16-0x1D:	map name
-		if ($rver >= 329)
-			$skip = fread($fp, 8);
-		// 0x1E-0x23: expansion
-		$skip = fread($fp, 6);
-		// 0x24-0x26
-		$resp = readByte($fp);
-		$fast = readByte($fp);
-		$nomo = readByte($fp);
-		// 0x27: demo insurance (0 or 1)
-		$insr = readByte($fp);
-		// 0x28-0x2B:	random seed
-		$seed = unpack('N', fread($fp, 4));
-		$seed = sprintf('%08X', $seed[1]);
-		// 0x2C-0x5D: expansion
-		$skip = fread($fp, 50);
-		// 0x5E-0x61: players 1-4 present
-		$ply1 = readByte($fp);
-		$ply2 = readByte($fp);
-		$ply3 = readByte($fp);
-		$ply4 = readByte($fp);
-		// version dependent tic length
-		if ($rver >= 335)
-			$ticlen += 1; // actions
-		if ($rver >= 333)
-			$ticlen += 3; // longtic + look
-		else if ($rver >= 329)
-			$ticlen += 1; // old look
-		if ($rver >= 340)
-			$ticlen += 1; // fly
-		if ($rver >= 401)
-			$ticlen += 5; // item/weapon/slot
 
 	} else {
 		echo "version $vers\n";

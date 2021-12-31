@@ -22,6 +22,7 @@ Requirements: [PHP](https://www.php.net)
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
 * PrBoom+ v1.11 longtics
+* PrBoom+um v2.6+
 * RUDE: v3.1.0pre5+ extended
 * TASDoom v1.10, TASMBF v2.03
 * ZDaemon v1.09+ (minimal)
@@ -109,7 +110,7 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
 | 222      | RUDE v3.1.0pre5+ extended |
-| 255      | Eternity Engine |
+| 255      | Eternity Engine, PrBoom+um v2.6+ |
 
 ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 

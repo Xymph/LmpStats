@@ -2,6 +2,9 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.10.0 - 2021-12-31
+* Support for PrBoom+um v2.6+
+
 ### Version 0.9.2 - 2021-11-08
 
 #### Changed
