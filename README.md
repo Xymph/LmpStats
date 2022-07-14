@@ -100,7 +100,7 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 108      | Doom v1.8 |
 | 109      | Doom v1.9 |
 | 110      | TASDoom v1.10, Chase, Timer |
-| 111      | PrDoom+ v1.11 longtics |
+| 111      | PrBoom+ v1.11 longtics |
 | 111      | Doom Classic v1.11 with `-cl` |
 | 112      | Doom Classic v1.12 debug |
 | 116      | Doom64 EX v1.4 (and other v1.x releases?) |

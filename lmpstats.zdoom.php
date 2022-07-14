@@ -274,7 +274,7 @@ function lmpZDoom($fp, $debug = 0, $zdoom9 = false)
 	if (preg_match("/^[A-Z][A-Z][A-Z](\d\d)$/i", $mapn, $match)) {
 		$epis = 1;
 		$miss = intval($match[1]);
-	} else if (preg_match("/^[A-Z](\d)M(\d\d?)$/i", $mapn, $match)) {
+	} elseif (preg_match("/^[A-Z](\d)M(\d\d?)$/i", $mapn, $match)) {
 		$epis = $match[1];
 		$miss = $match[2];
 	} else {

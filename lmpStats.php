@@ -13,15 +13,15 @@
 	while (isset($argv[1]) && $argv[1][0] == '-') {
 		if ($argv[1] == '-H') {
 			$game = 'H';
-		} else if ($argv[1] == '-X') {
+		} elseif ($argv[1] == '-X') {
 			$game = 'X';
-		} else if ($argv[1] == '-A') {
+		} elseif ($argv[1] == '-A') {
 			$game = 'A';
-		} else if ($argv[1] == '-cl') {
+		} elseif ($argv[1] == '-cl') {
 			$classic = true;
-		} else if ($argv[1] == '-z9') {
+		} elseif ($argv[1] == '-z9') {
 			$zdoom9 = true;
-		} else if ($argv[1] == '-d') {
+		} elseif ($argv[1] == '-d') {
 			if (ctype_digit($argv[2])) {
 				$debug = intval($argv[2]);
 				unset($argv[1]);

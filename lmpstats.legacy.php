@@ -234,7 +234,7 @@ function lmpLegacy($fp, $debug = 0)
 			$epis = 1;
 		if ($miss == 0)
 			$miss = intval($match[1]);
-	} else if (preg_match("/^[A-Z](\d)M(\d\d?)$/i", $mapn, $match)) {
+	} elseif (preg_match("/^[A-Z](\d)M(\d\d?)$/i", $mapn, $match)) {
 		if ($epis == 0)
 			$epis = $match[1];
 		if ($miss == 0)

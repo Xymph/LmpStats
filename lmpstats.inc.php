@@ -43,7 +43,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 			$ticlen = 6;
 
 	// Doom alpha v0.5
-	} else if ($game == 'A' && $vers == 101) { // 'e'
+	} elseif ($game == 'A' && $vers == 101) { // 'e'
 		$epis = intval(fread($fp, 1));
 		$skip = readByte($fp);
 		if ($skip != 'm')	{
@@ -60,7 +60,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 
 	// vanilla Doom v1.4-1.9 (= offsets), TASDoom v1.10, PrBoom v1.11 longtics;
 	// Doom Classic v1.11, v1.12 debug; Strife 1.01; Doom64 EX v1.4; RUDE 3.1.0pre5+
-	} else if ($vers >= 104 && $vers <= 112 || $vers == 101 || $vers == 116 || $vers == 222) {
+	} elseif ($vers >= 104 && $vers <= 112 || $vers == 101 || $vers == 116 || $vers == 222) {
 		if ($vers == 111 || $vers == 222)
 			$ticlen = 5;
 		if ($vers == 101 || $vers == 112)
@@ -102,7 +102,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		// 0x0D: tics data
 
 	// Doom64 EX v2.5+
-	} else if (chr($vers) == 'D') {
+	} elseif (chr($vers) == 'D') {
 		if (fread($fp, 4) != "M64\0") {
 			echo "invalid Doom64 EX version\n";
 			return false;
@@ -136,7 +136,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		// 0x1D: tics data
 
 	// Boom/MBF v2.00-2.04 / 2.10-2.14, CDoom v2.05-2.07
-	} else if (($vers >= 200 && $vers <= 204) ||
+	} elseif (($vers >= 200 && $vers <= 204) ||
 	           ($vers >= 205 && $vers <= 207) ||
 	           ($vers >= 210 && $vers <= 214)) {
 		if (($vers >= 205 && $vers <= 207) || $vers == 214)
@@ -180,7 +180,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		// 0x6D: tics data
 
 	// ZDoom v1.11-1.12; ZDaemon v1.09+
-	} else if (chr($vers) == 'Z') {
+	} elseif (chr($vers) == 'Z') {
 		$head = fread($fp, 3);
 		// ZDoom
 		if ($head == 'DEM') {
@@ -188,7 +188,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 			$rver += readByte($fp);
 			return array('vers' => ord('Y'), 'rver' => $rver);
 		// ZDaemon
-		} else if ($head == "DD\0") {
+		} elseif ($head == "DD\0") {
 			fseek($fp, 46);
 			fscanf($fp, "%[0-9(). -]", $rver);
 			return array('vers' => ord('X'), 'rver' => $rver);
@@ -198,19 +198,19 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		}
 
 	// ZDoom v1.14+
-	} else if (chr($vers) == 'F') {
+	} elseif (chr($vers) == 'F') {
 		require_once __DIR__.'/lmpstats.zdoom.php';
 		fseek($fp, 0);
 		return lmpZDoom($fp, $debug, $zdoom9);
 
 	// Legacy v1.29-1.44+
-	} else if ($vers >= 129 && $vers <= 144) {
+	} elseif ($vers >= 129 && $vers <= 144) {
 		require_once __DIR__.'/lmpstats.legacy.php';
 		fseek($fp, 0);
 		return lmpLegacy($fp, $debug);
 
 	// Eternity & PrBoom+um v2.55
-	} else if ($vers == 255) {
+	} elseif ($vers == 255) {
 		$sign = fread($fp, 6);
 		// Eternity v2.55: v3.29-4.0+
 		if (strncmp($sign, "ETERN", 5) == 0) {
@@ -258,7 +258,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 				$ticlen += 1; // actions
 			if ($rver >= 333)
 				$ticlen += 3; // longtic + look
-			else if ($rver >= 329)
+			elseif ($rver >= 329)
 				$ticlen += 1; // old look
 			if ($rver >= 340)
 				$ticlen += 1; // fly
