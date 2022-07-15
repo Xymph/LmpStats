@@ -1,6 +1,6 @@
 <?php
 // Analyze Doom-engine demos - main include
-// Copyright (C) 2021 by Frans P. de Vries
+// Copyright (C) 2021-2022 by Frans P. de Vries
 
 define('VERSION', '0.11.0');
 define('DEMOEND', 0x80);

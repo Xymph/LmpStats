@@ -2,7 +2,17 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.11.0 - 2022-07-15
+
+#### Added
+* Support for MBF21 v2.21
+
+#### Changed
+* Some [PSR-12](https://www.php-fig.org/psr/psr-12/)-related code formatting updates
+
 ### Version 0.10.0 - 2021-12-31
+
+#### Added
 * Support for PrBoom+um v2.6+
 
 ### Version 0.9.2 - 2021-11-08
