@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021 by Frans P. de Vries
 
-define('VERSION', '0.10.0');
+define('VERSION', '0.11.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
@@ -138,8 +138,8 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 	// Boom/MBF v2.00-2.04 / 2.10-2.14, CDoom v2.05-2.07
 	} elseif (($vers >= 200 && $vers <= 204) ||
 	           ($vers >= 205 && $vers <= 207) ||
-	           ($vers >= 210 && $vers <= 214)) {
-		if (($vers >= 205 && $vers <= 207) || $vers == 214)
+	           ($vers >= 210 && $vers <= 214) || $vers == 221) {
+		if (($vers >= 205 && $vers <= 207) || $vers == 214 | $vers == 221)
 			$ticlen = 5;
 		$sign = fread($fp, 6);
 		if ($sign != 'CDOOMC' && (ord($sign[0]) != 0x1D ||
@@ -147,8 +147,10 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 			echo "version $vers unexpected signature: $sign\n";
 			return false;
 		}
+		$comp = $insr = 0;
 		// 0x07: compatibility (0 or 1)
-		$comp = readByte($fp);
+		if ($vers != 221)
+			$comp = readByte($fp);
 		// 0x08-0x0A
 		$skll = readByte($fp) + 1;
 		$epis = readByte($fp);
@@ -158,18 +160,25 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		// 0x0C: console player: 0 = 1st, 1 = 2nd, etc.
 		$view = readByte($fp);
 		// 0x0D-0x12: expansion
-		$skip = fread($fp, 6);
+		if ($vers == 221)
+			$skip = fread($fp, 3);
+		else
+			$skip = fread($fp, 6);
 		// 0x13-0x15
 		$resp = readByte($fp);
 		$fast = readByte($fp);
 		$nomo = readByte($fp);
 		// 0x16: demo insurance (0 or 1)
-		$insr = readByte($fp);
+		if ($vers != 221)
+			$insr = readByte($fp);
 		// 0x17-0x1A:	random seed
 		$seed = unpack('N', fread($fp, 4));
 		$seed = sprintf('%08X', $seed[1]);
 		// 0x1B-0x4C: expansion
-		$skip = fread($fp, 50);
+		if ($vers == 221)
+			$skip = fread($fp, 36);
+		else
+			$skip = fread($fp, 50);
 		// 0x4D-0x50: players 1-4 present
 		$ply1 = readByte($fp);
 		$ply2 = readByte($fp);

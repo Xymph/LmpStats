@@ -21,6 +21,7 @@ Requirements: [PHP](https://www.php.net)
 * Doom Classic: v1.11-1.12
 * Doom Legacy: v1.29+
 * Eternity Engine: v3.29+
+* MBF21 v2.21
 * PrBoom+ v1.11 longtics
 * PrBoom+um v2.6+
 * RUDE: v3.1.0pre5+ extended
@@ -109,6 +110,7 @@ This is a list of LMP version bytes currently recognized and returned by LmpStat
 | 203      | TASMBF v2.03 |
 | 205-207  | CDoom v2.05-2.07 |
 | 210-214  | Boom/MBF v2.10-2.14 |
+| 221      | MBF21 v2.21 |
 | 222      | RUDE v3.1.0pre5+ extended |
 | 255      | Eternity Engine, PrBoom+um v2.6+ |
 
@@ -120,6 +122,7 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * [The unofficial LMP format description](http://web.archive.org/web/20090920220417/http://demospecs.planetquake.gamespy.com/lmp/lmp.html)
 * [Demo version bytes list](https://www.doomworld.com/forum/topic/120007-specifications-for-source-port-demo-formats/?tab=comments#comment-2265059)
 * [Boom / MBF demo header format](https://www.doomworld.com/forum/topic/72033-boom-mbf-demo-header-format/)
+* [MBF21 demo header format](https://github.com/kraflab/mbf21/blob/master/docs/developer_spec.md#demo-format--header)
 * [ZDaemon .zdd version format](https://www.doomworld.com/forum/topic/120789-lmpstats-a-php-library-to-collect-demo-statistics/?tab=comments#comment-2313099)
 * Analysis of [CDoom sources](https://sourceforge.net/projects/cdoom207/files/)
 * Analysis of [Doom Classic sources](https://github.com/id-Software/DOOM-3-BFG/tree/master/doomclassic)
