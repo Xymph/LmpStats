@@ -1,6 +1,6 @@
 <?php
 // Analyze Doom-engine demos - main include
-// Copyright (C) 2021-2022 by Frans P. de Vries
+// Copyright (C) 2021-2023 by Frans P. de Vries
 
 define('VERSION', '0.11.0');
 define('DEMOEND', 0x80);
@@ -299,7 +299,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 					$episu = 1;
 					$missu = intval(substr($extn, 3));
 				} elseif ($extn[0] == 'E' && ($mpos = strpos($extn, 'M')) !== false) {
-					$episu = intval(substr($extn, 0, $mpos));
+					$episu = intval(substr($extn, 1, $mpos));
 					$missu = intval(substr($extn, $mpos+1));
 				} else {
 					echo "$sign unexpected UMAPINFO extension value $extn\n";
@@ -360,6 +360,8 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		return false;
 	}
 	$plys = $ply1 + $ply2 + $ply3 + $ply4;
+	if ($plys == 0)
+		$plys = 1;
 
 	// tics data
 	debugLog(ftell($fp), $debug, 1, 'START');

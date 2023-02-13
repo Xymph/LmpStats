@@ -1,6 +1,6 @@
 <?php
 // Analyze Doom Legacy demos
-// Copyright (C) 2021-2022 by Frans P. de Vries
+// Copyright (C) 2021-2023 by Frans P. de Vries
 
 define('MAXPLAYERS', 32);
 define('NUMWEAPONS', 9);

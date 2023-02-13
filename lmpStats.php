@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 	// LMP (Doom-engine demo) statistics
-	// Copyright (C) 2021-2022 by Frans P. de Vries
+	// Copyright (C) 2021-2023 by Frans P. de Vries
 	require_once __DIR__.'/lmpstats.inc.php';
 
 	$usage = "Usage: {$argv[0]} [-d <level 1/2>] [-H|X|A] [-cl] [-z9] LMP-file\n";

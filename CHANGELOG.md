@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.11.1 - 2023-02-13
+
+#### Changed
+* Set default players count to 1
+
+#### Fixed
+* Fixed episode check in PrBoom+um v2.6+ format
+
 ### Version 0.11.0 - 2022-07-15
 
 #### Added
