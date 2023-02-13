@@ -299,7 +299,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 					$episu = 1;
 					$missu = intval(substr($extn, 3));
 				} elseif ($extn[0] == 'E' && ($mpos = strpos($extn, 'M')) !== false) {
-					$episu = intval(substr($extn, 1, $mpos));
+					$episu = intval(substr($extn, 1, $mpos-1));
 					$missu = intval(substr($extn, $mpos+1));
 				} else {
 					echo "$sign unexpected UMAPINFO extension value $extn\n";
