@@ -23,7 +23,7 @@ Requirements: [PHP](https://www.php.net)
 * Eternity Engine: v3.29+
 * MBF21 v2.21
 * PrBoom+ v1.11 longtics
-* PrBoom+um v2.6+
+* PrBoom+um v2.5.1.7-v2.6+
 * RUDE: v3.1.0pre5+ extended
 * TASDoom v1.10, TASMBF v2.03
 * ZDaemon v1.09+ (minimal)

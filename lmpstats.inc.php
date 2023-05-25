@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021-2023 by Frans P. de Vries
 
-define('VERSION', '0.11.0');
+define('VERSION', '0.12.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
@@ -61,6 +61,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 	// vanilla Doom v1.4-1.9 (= offsets), TASDoom v1.10, PrBoom v1.11 longtics;
 	// Doom Classic v1.11, v1.12 debug; Strife 1.01; Doom64 EX v1.4; RUDE 3.1.0pre5+
 	} elseif ($vers >= 104 && $vers <= 112 || $vers == 101 || $vers == 116 || $vers == 222) {
+	prDoom_um:
 		if ($vers == 111 || $vers == 222)
 			$ticlen = 5;
 		if ($vers == 101 || $vers == 112)
@@ -139,14 +140,15 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 	} elseif (($vers >= 200 && $vers <= 204) ||
 	           ($vers >= 205 && $vers <= 207) ||
 	           ($vers >= 210 && $vers <= 214) || $vers == 221) {
-		if (($vers >= 205 && $vers <= 207) || $vers == 214 | $vers == 221)
-			$ticlen = 5;
+	prBoom_um:
 		$sign = fread($fp, 6);
 		if ($sign != 'CDOOMC' && (ord($sign[0]) != 0x1D ||
 		    (ord($sign[4]) != 0xE6 && ord($sign[5]) != 0xE6))) {
 			echo "version $vers unexpected signature: $sign\n";
 			return false;
 		}
+		if (($vers >= 205 && $vers <= 207) || $vers == 214 | $vers == 221)
+			$ticlen = 5;
 		$comp = $insr = 0;
 		// 0x07: compatibility (0 or 1)
 		if ($vers != 221)
@@ -220,7 +222,20 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 
 	// Eternity & PrBoom+um v2.55
 	} elseif ($vers == 255) {
-		$sign = fread($fp, 6);
+		$sign = fread($fp, 1);
+
+		// PrBoom+um v2.55: v2.5.1.7
+		if (ord($sign[0]) >= 104 && ord($sign[0]) <= 112) {
+			$vers = ord($sign[0]);
+			goto prDoom_um;
+		}
+		if ((ord($sign[0]) >= 200 && ord($sign[0]) <= 204) ||
+		    (ord($sign[0]) >= 210 && ord($sign[0]) <= 214)) {
+			$vers = ord($sign[0]);
+			goto prBoom_um;
+		}
+
+		$sign .= fread($fp, 5);
 		// Eternity v2.55: v3.29-4.0+
 		if (strncmp($sign, "ETERN", 5) == 0) {
 			// 0x07-0x0A: real version
