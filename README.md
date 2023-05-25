@@ -130,6 +130,7 @@ ZDoom_versions.txt provides a list of version numbers in the ZDoom-family.
 * Analysis of [Doom64 EX sources](https://sourceforge.net/p/doom64ex/code/HEAD/tree/) or [alternate repository](https://github.com/svkaiser/Doom64EX/tree/master/src)
 * Analysis of [Doom Legacy sources](https://sourceforge.net/projects/doomlegacy/files/)
 * Analysis of [Eternity Engine sources](https://github.com/team-eternity/eternity)
+* Analysis of [PrBoom+ sources](https://github.com/coelckers/prboom-plus)
 * Analysis of [RUDE sources](https://github.com/drfrag666/RUDE)
 * [ZDoom demo specification](https://zdoom.org/wiki/Demo) on the [ZDoom wiki](https://zdoom.org/wiki/)
 * Analysis of [ZDoom & GZDoom sources](https://zdoom.org/files/) and more [ZDoom sources](https://forum.zdoom.org/viewtopic.php?t=59727)
