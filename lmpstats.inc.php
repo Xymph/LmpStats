@@ -13,7 +13,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 	}
 	$ticlen = 4;
 	$ticrat = 35;
-	$rver = $sver = 0;
+	$rver = $sver = $umap = 0;
 	$seed = '';
 	$cls1 = $cls2 = $cls3 = $cls4 = -1;
 
@@ -227,11 +227,13 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		// PrBoom+um v2.55: v2.5.1.7
 		if (ord($sign[0]) >= 104 && ord($sign[0]) <= 112) {
 			$vers = ord($sign[0]);
+			$umap = 1;
 			goto prDoom_um;
 		}
 		if ((ord($sign[0]) >= 200 && ord($sign[0]) <= 204) ||
 		    (ord($sign[0]) >= 210 && ord($sign[0]) <= 214)) {
 			$vers = ord($sign[0]);
+			$umap = 1;
 			goto prBoom_um;
 		}
 
@@ -403,6 +405,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		'vers' => $vers,
 		'rver' => $rver,
 		'sver' => $sver,
+		'umap' => $umap,
 		'skll' => $skll,
 		'epis' => $epis,
 		'miss' => $miss,

@@ -51,6 +51,7 @@ The return array contains the following entries, if available:
 * **`vers`**: LMP version (see below)
 * **`rver`**: real version for Eternity, ZDaemon, and ZDoom-family
 * **`sver`**: sub-version for Eternity or minimum version for ZDoom-family
+* **`umap`**: PrBoom+um v2.5.1.7 flag
 * **`skll`**: [skill level](https://doomwiki.org/wiki/Skill_level)
 * **`epis`**: episode number (always 1 for Doom II)
 * **`miss`**: mission or map number
