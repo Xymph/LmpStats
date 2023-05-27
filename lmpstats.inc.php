@@ -325,48 +325,14 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 			}
 
 			$rver = readByte($fp);
-			$sign = fread($fp, 6);
-			if (ord($sign[0]) != 0x1D ||
-			    (ord($sign[4]) != 0xE6 && ord($sign[5]) != 0xE6)) {
-				echo "version $vers unexpected signature: $sign\n";
-				return false;
-			}
-			// 0x07* +extensions: compatibility (0 or 1)
-			$comp = readByte($fp);
-			// 0x08-0x0A*
-			$skll = readByte($fp) + 1;
-			$epis = readByte($fp);
-			$miss = readByte($fp);
-			if ($epis != $episu || $miss != $missu) {
-				echo "UMAPINFO / Boom slots deviate: episode $episu / $epis, mission $missu / $miss\n";
-				return false;
-			}
-			// 0x0B*: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath
-			$mode = readByte($fp);
-			// 0x0C*: console player: 0 = 1st, 1 = 2nd, etc.
-			$view = readByte($fp);
-			// 0x0D-0x12*: expansion
-			$skip = fread($fp, 6);
-			// 0x13-0x15*
-			$resp = readByte($fp);
-			$fast = readByte($fp);
-			$nomo = readByte($fp);
-			// 0x16*: demo insurance (0 or 1)
-			$insr = readByte($fp);
-			// 0x17-0x1A*:	random seed
-			$seed = unpack('N', fread($fp, 4));
-			$seed = sprintf('%08X', $seed[1]);
-			// 0x1B-0x4C*: expansion
-			$skip = fread($fp, 50);
-			// 0x4D-0x50*: players 1-4 present
-			$ply1 = readByte($fp);
-			$ply2 = readByte($fp);
-			$ply3 = readByte($fp);
-			$ply4 = readByte($fp);
-			// 0x51-0x6C*: future expansion
-			$skip = fread($fp, 28);
-			// 0x6D*: tics data
+			if ($rver >= 104 && $rver <= 112)
+				goto prDoom_um;
+			if (($rver >= 200 && $rver <= 204) ||
+			    ($rver >= 210 && $rver <= 214))
+				goto prBoom_um;
 
+			echo "version $vers unexpected real version: $rver\n";
+			return false;
 		} else {
 			echo "version $vers unexpected signature: $sign\n";
 			return false;
