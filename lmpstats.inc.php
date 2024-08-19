@@ -333,6 +333,33 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 
 			echo "version $vers unexpected real version: $rver\n";
 			return false;
+
+		// Doom + Doom II (Legacy of Rust)
+		} elseif (strncmp($sign, "OSRS2", 5) == 0) {
+			$ticlen = 5;
+			$comp = $insr = 0;
+			// 0x07-0x0A: extension version
+			$ever = unpack('N', fread($fp, 4));
+			// 0x0B-0x13: git version
+			$skip = fread($fp, 9);
+			// 0x14-0x16
+			$skll = readByte($fp) + 1;
+			$epis = readByte($fp);
+			$miss = readByte($fp);
+			// 0x17: play mode: 0 = Single/coop, 1 = DM, 2 = AltDeath, 3 = modern DM3
+			$mode = readByte($fp);
+			// 0x18-0x1A
+			$resp = readByte($fp);
+			$fast = readByte($fp);
+			$nomo = readByte($fp);
+			// 0x1B: console player: 0 = 1st, 1 = 2nd, etc.
+			$view = readByte($fp);
+			// 0x1C-0x1F: players 1-4 present
+			$ply1 = readByte($fp);
+			$ply2 = readByte($fp);
+			$ply3 = readByte($fp);
+			$ply4 = readByte($fp);
+
 		} else {
 			echo "version $vers unexpected signature: $sign\n";
 			return false;
