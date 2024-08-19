@@ -1,8 +1,8 @@
 <?php
 // Analyze Doom-engine demos - main include
-// Copyright (C) 2021-2023 by Frans P. de Vries
+// Copyright (C) 2021-2024 by Frans P. de Vries
 
-define('VERSION', '0.12.1');
+define('VERSION', '0.13.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
