@@ -2,7 +2,7 @@
 // Analyze Doom-engine demos - main include
 // Copyright (C) 2021-2024 by Frans P. de Vries
 
-define('VERSION', '0.13.0');
+define('VERSION', '0.14.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
@@ -11,12 +11,14 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		echo "$file: cannot open\n";
 		return false;
 	}
+	$dsdatc = FALSE;
 	$ticlen = 4;
 	$ticrat = 35;
 	$rver = $sver = $umap = 0;
 	$seed = '';
 	$cls1 = $cls2 = $cls3 = $cls4 = -1;
 
+dsda_doom:
 	$vers = readByte($fp);
 	// vanilla Doom <= v1.2, Heretic, Hexen
 	if ($vers >= 0 && $vers <= 9) {
@@ -220,7 +222,7 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 		fseek($fp, 0);
 		return lmpLegacy($fp, $debug);
 
-	// Eternity & PrBoom+um v2.55
+	// various v2.55
 	} elseif ($vers == 255) {
 		$sign = fread($fp, 1);
 
@@ -334,6 +336,23 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 			echo "version $vers unexpected real version: $rver\n";
 			return false;
 
+		// DSDA-Doom
+		} elseif (ord($sign[0]) == 0x1d && strncmp(substr($sign, 1), "DSDA", 4) == 0 && ord($sign[5]) == 0xe6) {
+			$rver = readByte($fp);
+			// 0x08-0x0B: end marker
+			$skip = fread($fp, 4);
+			// 0x0C-0x0F: tics
+			$tics = unpack('N', fread($fp, 4));
+			$tics = $tics[1];
+			if ($rver >= 2)
+				// 0x10: flags
+				$skip = readByte($fp);
+			if ($rver >= 3)
+				// 0x11: UDMF version
+				$skip = readByte($fp);
+			$dsdatc = TRUE;
+			goto dsda_doom;
+
 		// Doom + Doom II (Legacy of Rust)
 		} elseif (strncmp($sign, "OSRS2", 5) == 0) {
 			$ticlen = 5;
@@ -376,17 +395,19 @@ function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = f
 	// tics data
 	debugLog(ftell($fp), $debug, 1, 'START');
 	$foot = '';
-	$tics = 0;
-	while ($tic = fread($fp, $ticlen)) {
-		if ($vers >= 0 && ord($tic[0]) == DEMOEND) {
-			debugLog(ftell($fp)-strlen($tic), $debug, 1, 'DEMOEND');
-			$foot = substr($tic, 1);
-			break;
+	if (!$dsdatc) {
+		$tics = 0;
+		while ($tic = fread($fp, $ticlen)) {
+			if ($vers >= 0 && ord($tic[0]) == DEMOEND) {
+				debugLog(ftell($fp)-strlen($tic), $debug, 1, 'DEMOEND');
+				$foot = substr($tic, 1);
+				break;
+			}
+			$tics++;
+			debugLog(ftell($fp)-strlen($tic), $debug, 2, 'TIC: '.$tics);
 		}
-		$tics++;
-		debugLog(ftell($fp)-strlen($tic), $debug, 2, 'TIC: '.$tics);
+		$foot .= fread($fp, 4*1024);
 	}
-	$foot .= fread($fp, 4*1024);
 
 	// compute tics & time
 	$tics /= $plys;

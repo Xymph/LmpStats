@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.14.0 - 2024-10-01
+#### Added
+* Support for DSDA-Doom
+
 ### Version 0.13.0 - 2024-08-19
 #### Added
 * Support for Doom + Doom II (Legacy of Rust)
