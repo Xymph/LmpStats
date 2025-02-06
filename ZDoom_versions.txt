@@ -117,6 +117,8 @@ GZDoom (some intermediate minor revisions skipped):
 4.4.1:	0x221	0x221
 4.4.2:	0x221	0x221
 4.5.0:	0x221	0x221
+...
+4.14.0:	0x221	0x221
 
 While MINDEMOVERSION is updated alongside DEMOGAMEVERSION in version.h,
 the minimum version written in .lmp's stays hardcoded at 0x203 in

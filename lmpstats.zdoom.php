@@ -1,6 +1,6 @@
 <?php
 // Analyze ZDoom-family demos
-// Copyright (C) 2021-2024 by Frans P. de Vries
+// Copyright (C) 2021-2025 by Frans P. de Vries
 
 // deathmatch flags
 define('DF_NO_MONSTERS',      0x1000);
