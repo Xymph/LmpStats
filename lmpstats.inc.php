@@ -1,8 +1,8 @@
 <?php
 // Analyze Doom-engine demos - main include
-// Copyright (C) 2021-2024 by Frans P. de Vries
+// Copyright (C) 2021-2025 by Frans P. de Vries
 
-define('VERSION', '0.14.0');
+define('VERSION', '0.15.0');
 define('DEMOEND', 0x80);
 
 function lmpStats($file, $game = null, $debug = 0, $classic = false, $zdoom9 = false)
@@ -29,19 +29,21 @@ dsda_doom:
 		$miss = readByte($fp);
 		// 0x03-0x06: players 1-4 present, Hexen classes
 		$ply1 = readByte($fp);
-		if ($game == 'X')
+		if ($game == 'X0' || $game == 'X1')
 			$cls1 = readByte($fp);
 		$ply2 = readByte($fp);
-		if ($game == 'X')
+		if ($game == 'X0' || $game == 'X1')
 			$cls2 = readByte($fp);
 		$ply3 = readByte($fp);
-		if ($game == 'X')
+		if ($game == 'X0' || $game == 'X1')
 			$cls3 = readByte($fp);
 		$ply4 = readByte($fp);
-		if ($game == 'X')
+		if ($game == 'X0' || $game == 'X1')
 			$cls4 = readByte($fp);
+		if ($game == 'X1') // Hexen v1.1 player/class 5-8
+			$skip = fread($fp, 8);
 		$mode = $resp = $fast = $nomo = $view = 0;
-		if ($game == 'H' || $game == 'X')
+		if ($game == 'H' || $game == 'X0' || $game == 'X1')
 			$ticlen = 6;
 
 	// Doom alpha v0.5

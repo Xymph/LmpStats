@@ -12,7 +12,7 @@ Requirements: [PHP](https://www.php.net)
 
 * Doom: v1.0-v1.9, v0.5 alpha
 * Heretic
-* Hexen
+* Hexen: v1.0, v1.1
 * Strife: v1.01
 * Boom/MBF: v2.00-2.04, v2.10-2.14
 * CDoom: v2.05-2.07
@@ -36,11 +36,11 @@ Requirements: [PHP](https://www.php.net)
 
 **lmpStats.php** is a command-line script to invoke the library on a demo file, and also shows how to include **lmpstats.inc.php** in a script and use its results.
 
-    lmpStats.php [-d <level 1/2>] [-H|X|A] [-cl] [-z9] LMP-file
+    lmpStats.php [-d <level 1/2>] [-H|X0|X1|A] [-cl] [-z9] LMP-file
 
 The debug flag (`-d`) shows all tics and messages at level `2`, or only special tics at level `1`, with tic addressing from the start of the file.  For the ZDoom-family, tic addresses are relative to the start of the (uncompressed) body chunk, which is saved in `/tmp/body.lmp` at both levels for hex-dump comparison.
 
-The game flag is needed to distinguish Heretic (`-H`), Hexen (`-X`) and Doom v0.5 alpha (`-A`) from version-less Doom v1.0-1.2 demos.
+The game flag is needed to distinguish Heretic (`-H`), Hexen v1.0 (`-X0`), Hexen v1.1 (`-X1`) and Doom v0.5 alpha (`-A`) from version-less Doom v1.0-1.2 demos.
 
 The Classic (`-cl`) flag is needed to distinguish Doom Classic format from PrBoom+ longtics format, both v1.11.
 

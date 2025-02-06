@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/).
 
+### Version 0.15.0 - 2025-02-06
+#### Added
+* Distinguish Hexen v1.0 (-X0) from v1.1 (-X1)
+
 ### Version 0.14.0 - 2024-10-01
 #### Added
 * Support for DSDA-Doom

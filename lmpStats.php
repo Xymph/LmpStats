@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 	// LMP (Doom-engine demo) statistics
-	// Copyright (C) 2021-2024 by Frans P. de Vries
+	// Copyright (C) 2021-2025 by Frans P. de Vries
 	require_once __DIR__.'/lmpstats.inc.php';
 
-	$usage = "Usage: {$argv[0]} [-d <level 1/2>] [-H|X|A] [-cl] [-z9] LMP-file\n";
+	$usage = "Usage: {$argv[0]} [-d <level 1/2>] [-H|X0|X1|A] [-cl] [-z9] LMP-file\n";
 
 	// check input options & parameters
 	$game = null;
@@ -13,8 +13,10 @@
 	while (isset($argv[1]) && $argv[1][0] == '-') {
 		if ($argv[1] == '-H') {
 			$game = 'H';
-		} elseif ($argv[1] == '-X') {
-			$game = 'X';
+		} elseif ($argv[1] == '-X0') {
+			$game = 'X0';
+		} elseif ($argv[1] == '-X1') {
+			$game = 'X1';
 		} elseif ($argv[1] == '-A') {
 			$game = 'A';
 		} elseif ($argv[1] == '-cl') {
@@ -47,7 +49,7 @@
 	$lmp = lmpStats($argv[1], $game, $debug, $classic, $zdoom9);
 	echo "{$argv[1]} :\n";
 	// show class 'legend'
-	if ($game == 'X')
+	if ($game == 'X0' || $game == 'X1')
 		echo 'classes: '.print_r(array('Fighter', 'Cleric', 'Mage'), true);
 	print_r($lmp);
 
